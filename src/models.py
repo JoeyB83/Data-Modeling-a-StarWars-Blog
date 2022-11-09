@@ -16,8 +16,8 @@ class User(Base):
     username = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     password = Column(String(250), nullable=False)
-    favorite_characters = relationship("Favorite_Characters")
-    favorite_planets = relationship("Favorite_Planets")
+    favorite_characters = relationship("Favorite_Characters", back_populates = "user_fav_characters")
+    favorite_planets = relationship("Favorite_Planets", back_populates = "user_fav_planets")
 
     def serialize(self):
         return{
@@ -68,7 +68,7 @@ class Favorite_Planets(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     planet_id = Column(Integer, ForeignKey('planet.id'), primary_key=True)
-    
+    user_fav_planets = relationship("User", back_populates = "favorite_planets")
 
     def serialize(self):
         return{
@@ -82,6 +82,7 @@ class Favorite_Characters(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     character_id = Column(Integer, ForeignKey('character.id'), primary_key=True)
+    user_fav_characters = relationship("User", back_populates = "favorite_characters")
 
     def serialize(self):
         return{
